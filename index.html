@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday, My Favorite Person</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <style>
+        /* Base and Background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #14040c;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Starry glowing background */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background:
+                radial-gradient(circle at 20% 25%, rgba(219, 39, 119, 0.18), transparent 35%),
+                radial-gradient(circle at 80% 35%, rgba(244, 114, 182, 0.14), transparent 35%),
+                radial-gradient(circle at 50% 85%, rgba(190, 24, 93, 0.16), transparent 40%);
+            background-color: #14040c;
+        }
+
+        .stars {
+            position: absolute;
+            inset: 0;
+            background-image:
+                radial-gradient(1.5px 1.5px at 20px 30px, #fbcfe8, transparent),
+                radial-gradient(1.5px 1.5px at 40px 70px, #fff, transparent),
+                radial-gradient(2px 2px at 90px 40px, #f9a8d4, transparent),
+                radial-gradient(1.5px 1.5px at 130px 80px, #fff, transparent),
+                radial-gradient(2px 2px at 160px 120px, #fbcfe8, transparent);
+            background-repeat: repeat;
+            background-size: 220px 220px;
+            animation: twinkle 4s infinite alternate;
+            opacity: 0.35;
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.15;
+            }
+
+            100% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(20, 4, 12, 0.72);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(244, 114, 182, 0.12);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(255, 255, 255, 0.05) 0%, rgba(244, 114, 182, 0.02) 100%);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 114, 182, 0.16);
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.35);
+            border-radius: 18px;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 28px rgba(244, 114, 182, 0.55), 0 0 12px rgba(244, 114, 182, 0.3);
+        }
+
+        /* Entry Screen */
+        #entry-screen {
+            transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+        }
+
+        .pin-input {
+            width: 44px;
+            height: 54px;
+            font-size: 22px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(244, 114, 182, 0.35);
+            border-radius: 12px;
+            color: white;
+            transition: all 0.25s ease;
+        }
+
+        @media (min-width: 640px) {
+            .pin-input {
+                width: 50px;
+                height: 60px;
+                font-size: 24px;
+            }
+        }
+
+        .pin-input:focus {
+            outline: none;
+            border-color: #f472b6;
+            box-shadow: 0 0 16px rgba(244, 114, 182, 0.5);
+            background: rgba(244, 114, 182, 0.12);
+        }
+
+        /* --- VERTICAL FLOATING MUSIC SIDEBAR (KIRI BAWAH SEPERTI VIDEO) --- */
+        /* --- VERTICAL FLOATING MUSIC SIDEBAR (ANIMASI POP-UP) --- */
+        .music-sidebar-card {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 168px;
+            z-index: 40;
+            background: linear-gradient(165deg, rgba(38, 10, 24, 0.88) 0%, rgba(20, 4, 12, 0.92) 100%);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(244, 114, 182, 0.25);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), 0 0 20px rgba(244, 114, 182, 0.12);
+            border-radius: 18px;
+            padding: 10px;
+            transform-origin: bottom left;
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1) translateY(0);
+            /* Efek membal (bouncy pop-up) saat muncul */
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.3s ease,
+                visibility 0.3s ease;
+        }
+
+        /* State saat sidebar ditutup */
+        .music-sidebar-card.minimized {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(0.6) translateY(20px);
+            transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.22s ease,
+                visibility 0.22s ease;
+        }
+
+        /* Tombol Mini Musik dengan Animasi Pop-Up */
+        .music-mini-pill {
+            position: fixed !important;
+            bottom: 20px !important;
+            left: 20px !important;
+            z-index: 50 !important;
+            transform-origin: bottom left;
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+        }
+
+        .music-mini-pill:hover {
+            transform: scale(1.06);
+        }
+
+        .music-mini-pill.mini-hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transform: scale(0.4) !important;
+        }
+
+        .eq-bar {
+            width: 2.5px;
+            height: 10px;
+            background-color: #f472b6;
+            border-radius: 2px;
+            animation: eqPulse 0.75s ease-in-out infinite alternate;
+        }
+
+        .eq-bar:nth-child(2) {
+            animation-delay: 0.2s;
+            height: 14px;
+        }
+
+        .eq-bar:nth-child(3) {
+            animation-delay: 0.4s;
+            height: 7px;
+        }
+
+        .eq-paused .eq-bar {
+            animation: none;
+            height: 3px;
+        }
+
+        @keyframes eqPulse {
+            0% {
+                transform: scaleY(0.3);
+            }
+
+            100% {
+                transform: scaleY(1);
+            }
+        }
+
+        /* --- RIGHT VERTICAL SCROLL TRACK (KANAN SEPERTI VIDEO) --- */
+        .right-scroll-track {
+            position: fixed;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 170px;
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 999px;
+            z-index: 40;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .right-scroll-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0%;
+            background: linear-gradient(to bottom, #f9a8d4, #ec4899);
+            box-shadow: 0 0 10px #f472b6;
+            border-radius: 999px;
+            transition: height 0.1s ease-out;
+        }
+
+        .scroll-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            z-index: 2;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .scroll-dot.active {
+            background: #fce7f3;
+            box-shadow: 0 0 8px #f472b6;
+            transform: scale(1.35);
+        }
+
+        /* Candles (5 Lilin seperti di video) */
+        .candle-container {
+            display: flex;
+            gap: 14px;
+            justify-content: center;
+            align-items: flex-end;
+            height: 95px;
+            margin-bottom: 16px;
+        }
+
+        .candle {
+            width: 14px;
+            height: 62px;
+            background: linear-gradient(to right, #fef08a, #fde047, #eab308);
+            border-radius: 4px;
+            position: relative;
+            box-shadow: 0 0 12px rgba(250, 204, 21, 0.25);
+        }
+
+        .candle::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 5px;
+            background: #422006;
+        }
+
+        .flame {
+            width: 12px;
+            height: 22px;
+            background: radial-gradient(ellipse at bottom, #fff 15%, #fef08a 45%, #f97316 85%, transparent 100%);
+            border-radius: 50% 50% 25% 25%;
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 16px #facc15, 0 0 32px #f97316;
+            animation: flicker 0.55s infinite alternate;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            transform-origin: bottom center;
+        }
+
+        .candle.blown-out .flame {
+            animation: none;
+            opacity: 0;
+            transform: translateX(-50%) scale(0) rotate(45deg);
+        }
+
+        @keyframes flicker {
+            0% {
+                transform: translateX(-50%) scale(1) rotate(-2deg);
+                opacity: 0.92;
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.06) rotate(1deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(0.95) rotate(3deg);
+                opacity: 0.85;
+            }
+        }
+
+        /* Letter & Typewriter */
+        #letter-content {
+            transition: all 0.8s ease;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            background: linear-gradient(155deg, rgba(190, 24, 93, 0.22) 0%, rgba(80, 7, 36, 0.35) 100%);
+            border: 1px solid rgba(244, 114, 182, 0.28);
+            border-radius: 20px;
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+        }
+
+        #letter-content.open {
+            max-height: 2500px;
+            opacity: 1;
+            margin-top: 12px;
+        }
+
+        .typing-cursor::after {
+            content: '|';
+            display: inline-block;
+            margin-left: 2px;
+            color: #fbcfe8;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .bottle-glow {
+            transition: transform 0.35s ease, filter 0.35s ease;
+            filter: drop-shadow(0 0 16px rgba(244, 114, 182, 0.55));
+            animation: floatBottle 3.5s ease-in-out infinite;
+        }
+
+        .bottle-glow:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 28px rgba(251, 207, 232, 0.9));
+        }
+
+        @keyframes floatBottle {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #14040c;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #be185d;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="antialiased">
+
+    <!-- Background -->
+    <div class="stars-bg">
+        <div class="stars"></div>
+    </div>
+
+    <!-- ENTRY SCREEN -->
+    <div id="entry-screen"
+        class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#14040c]/95 backdrop-blur-lg px-4">
+        <div class="glass-card p-8 md:p-10 max-w-md w-full text-center">
+            <p class="text-pink-300 text-xs tracking-[0.25em] uppercase mb-3">Tugas Membuat Website Pribadi</p>
+            <h2 class="text-3xl md:text-4xl font-serif text-white mb-6 text-glow">Masukan Kode</h2>
+            <div class="flex gap-2 sm:gap-3 justify-center mb-6">
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+                <input type="password" maxlength="1" class="pin-input" inputmode="numeric" />
+            </div>
+            <p id="pin-message"
+                class="text-gray-400 text-xs sm:text-sm max-w-xs mx-auto transition-colors duration-300">Enter our
+                6-digit secret code to unlock.</p>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main-content" class="relative z-10 opacity-0 transition-opacity duration-1000">
+
+        <!-- Navigation -->
+        <nav class="fixed top-0 w-full z-40 glass">
+            <div class="max-w-6xl mx-auto px-5">
+                <div class="flex items-center justify-between h-14">
+                    <span class="font-serif italic text-lg text-pink-200 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-pink-400 animate-pulse"></span>
+                        Ajeng's Birthday
+                    </span>
+                    <div class="hidden md:flex space-x-7 text-xs tracking-wide font-medium text-gray-300">
+                        <a href="#home" class="nav-link hover:text-pink-300 transition">Surface</a>
+                        <a href="#memories" class="nav-link hover:text-pink-300 transition">Our Memories</a>
+                        <a href="#gallery" class="nav-link hover:text-pink-300 transition">Gallery</a>
+                        <a href="#letter" class="nav-link hover:text-pink-300 transition">The Letter</a>
+                        <a href="#wishes" class="nav-link hover:text-pink-300 transition">Wishes</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section id="home"
+            class="min-h-screen flex flex-col items-center justify-center text-center px-4 pt-16 relative">
+            <p class="text-pink-300/80 tracking-[0.25em] text-[11px] md:text-xs uppercase mb-5 font-medium">A message
+                carried on the tide, for you</p>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-serif text-glow leading-[1.08] mb-6">
+                Happy Birthday,<br>
+                <span class="italic text-pink-200">My Favorite Person</span>
+            </h1>
+            <p class="text-gray-300 max-w-xl text-base md:text-lg leading-relaxed mb-10">
+                Hitam putih mulai berwarna. Scroll down, the tide is coming in, dan ternyata aku bawa something special
+                just for you. 🤍
+            </p>
+            <div class="flex flex-col sm:flex-row gap-3.5 mb-14">
+                <a href="#memories"
+                    class="px-7 py-3 rounded-full bg-gradient-to-r from-pink-600 to-rose-500 hover:from-pink-500 hover:to-rose-400 text-white text-sm font-medium transition shadow-[0_0_20px_rgba(236,72,153,0.45)]">Begin
+                    the Descent ↓</a>
+                <a href="#letter"
+                    class="px-7 py-3 rounded-full bg-white/5 border border-pink-300/20 hover:bg-white/10 text-pink-100 text-sm font-medium transition">Jump
+                    Straight to The Letter</a>
+            </div>
+
+            <!-- Scroll to dive in indicator (seperti di video) -->
+            <div class="flex flex-col items-center gap-2 text-pink-300/60">
+                <span class="text-[10px] tracking-[0.25em] uppercase">Scroll to dive in</span>
+                <div class="w-[1px] h-8 bg-gradient-to-b from-pink-400/60 to-transparent"></div>
+            </div>
+        </section>
+
+        <!-- Our Memories Section -->
+        <section id="memories" class="py-24 px-4 max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <p class="text-pink-400 tracking-[0.2em] text-xs uppercase mb-2">The deepest desires, are the quietest
+                </p>
+                <h2 class="text-4xl md:text-5xl font-serif text-white">Chapters from <span
+                        class="italic text-pink-200">our story</span></h2>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Chapter 1 -->
+                <div class="glass-card p-7 md:p-9 transform transition hover:-translate-y-1">
+                    <p class="text-pink-400 text-xs font-semibold tracking-[0.2em] mb-2">CHAPTER ONE</p>
+                    <h3 class="text-2xl md:text-3xl font-serif text-white mb-3">where it all started</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Berawal dari seseorang yang tak saling kenal bisa jadi kita yang sekarang,  
+                        yang awalnya hanya sekedar bercanda bisa jadi saling takut kehilangan satu 
+                        sama lain, aku ganyangka kita bisa sejauh ini, aku harap kita selalu terus kita.
+                    </p>
+                </div>
+
+                <!-- Chapter 2 -->
+                <div class="glass-card p-7 md:p-9 transform transition hover:-translate-y-1">
+                    <p class="text-pink-400 text-xs font-semibold tracking-[0.2em] mb-2">CHAPTER TWO</p>
+                    <h3 class="text-2xl md:text-3xl font-serif text-white mb-3">the quiet days</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Terimakasih udah hadir di hidup aku, udah warnain hari hari aku dengan bisa ketawa bareng,
+                        certia keluh kesah kita tiap malem, dan ngewujudin wishlist wishlist yang kita udah rencanain,
+                        makasih banyak sayangku.
+                    </p>
+                </div>
+
+                <!-- Chapter 3 -->
+                <div class="glass-card p-7 md:p-9 transform transition hover:-translate-y-1">
+                    <p class="text-pink-400 text-xs font-semibold tracking-[0.2em] mb-2">CHAPTER THREE</p>
+                    <h3 class="text-2xl md:text-3xl font-serif text-white mb-3">through the storms</h3>
+                    <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                        Aku seneng bisa sampae saat ini sama kamu, kita bisa ngelewatin badai besar meskipun ada fase dimana kita 
+                        saling tak kenal tak saling nyapa, tapi sekarang kita balik lagi, aku harap dari aku dan kamu menjadi kita.
+                        I VERRY VERRY LOVE YOU SO MUCH SAYANG.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section (Gaya Kartu Foto seperti di Video) -->
+        <section id="gallery" class="py-24 px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-14">
+                    <p class="text-pink-400 tracking-[0.2em] text-xs uppercase mb-2">Captured Moments</p>
+                    <h2 class="text-4xl md:text-5xl font-serif text-white mb-3">A few of my favorite <br><span
+                            class="italic text-pink-200">shots of you</span></h2>
+                    <p class="text-gray-400 text-sm">Tap any photo to look closer.</p>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-5">
+                    <!-- Photo 1 -->
+                    <div onclick="openPhoto('memory1.jpeg', 'Your smile always makes everything feel lighter.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory1.jpeg" alt="Memory 1"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+
+                    <!-- Photo 2 -->
+                    <div onclick="openPhoto('memory2.jpeg', 'Every little moment with you is worth keeping.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory2.jpeg" alt="Memory 2"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+
+                    <!-- Photo 3 -->
+                    <div onclick="openPhoto('memory3.jpeg', 'My favorite view, every single time.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory3.jpeg" alt="Memory 3"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+
+                    <!-- Photo 4 -->
+                    <div onclick="openPhoto('memory4.jpeg', 'Just you being effortlessly yourself.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory4.jpeg" alt="Memory 4"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+
+                    <!-- Photo 5 -->
+                    <div onclick="openPhoto('memory5.jpeg', 'Peace looks like being right next to you.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory5.jpeg" alt="Memory 5"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+
+                    <!-- Photo 6 -->
+                    <div onclick="openPhoto('memory6.jpeg', 'Here is to many more chapters together.')"
+                        class="relative aspect-[3/4] overflow-hidden rounded-2xl border border-pink-300/15 bg-black/40 cursor-pointer group">
+                        <img src="memory6.jpeg" alt="Memory 6"
+                            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transform transition duration-500 group-hover:scale-105">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Letter Section -->
+        <section id="letter" class="py-28 px-4 max-w-3xl mx-auto text-center min-h-[75vh] flex flex-col justify-center">
+            <p class="text-pink-400 tracking-[0.2em] text-xs uppercase mb-3">A bottle, finally ashore for you</p>
+            <h2 class="text-4xl md:text-6xl font-serif text-white mb-10">Open when <span
+                    class="italic text-pink-200">found</span></h2>
+
+            <!-- Tombol Botol Bercahaya (Hilang saat diklik, digantikan surat mesin tik) -->
+            <button onclick="openLetter()" class="mx-auto focus:outline-none py-6" id="bottle-btn">
+                <svg class="w-24 h-28 mx-auto bottle-glow" viewBox="0 0 80 110" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <!-- Gabus Tutup Botol -->
+                    <rect x="31" y="6" width="18" height="12" rx="3" fill="#f59e0b" fill-opacity="0.85" />
+                    <!-- Leher & Badan Botol -->
+                    <path
+                        d="M30 18H50V32C50 37 62 43 62 54V94C62 100.627 56.6274 106 50 106H30C23.3726 106 18 100.627 18 94V54C18 43 30 37 30 32V18Z"
+                        fill="url(#bottleGrad)" stroke="#f9a8d4" stroke-width="2" />
+                    <!-- Gulungan Surat di Dalam Botol -->
+                    <rect x="29" y="56" width="22" height="36" rx="4" transform="rotate(-8 29 56)" fill="#fce7f3"
+                        fill-opacity="0.85" />
+                    <line x1="33" y1="65" x2="46" y2="63" stroke="#db2777" stroke-width="1.5" stroke-linecap="round" />
+                    <line x1="34" y1="72" x2="47" y2="70" stroke="#db2777" stroke-width="1.5" stroke-linecap="round" />
+                    <line x1="35" y1="79" x2="44" y2="78" stroke="#db2777" stroke-width="1.5" stroke-linecap="round" />
+                    <defs>
+                        <linearGradient id="bottleGrad" x1="40" y1="18" x2="40" y2="106" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="#f472b6" stop-opacity="0.35" />
+                            <stop offset="1" stop-color="#be185d" stop-opacity="0.15" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <p class="text-[11px] text-pink-300/75 mt-4 tracking-[0.25em] uppercase">Tap the bottle to open it</p>
+            </button>
+
+            <!-- Isi Surat Mesin Tik -->
+            <div id="letter-content" class="text-left p-7 md:p-11 relative">
+                <h3 class="text-3xl md:text-4xl font-serif italic text-pink-100 mb-6 text-center">Dear you,</h3>
+                <div class="space-y-4 text-pink-50/90 text-sm md:text-base leading-relaxed">
+                    <p>HALLAWWWW SAYANGGGGGG MAAPPPPPPP YAKKKK AKUUUU NIPUUUU KAMUUU😭😭😭😭. YEAYYY TODAYY IS YOURS BIRTHDAYYY🥳🥳🥳🥳,
+                        selamat ulang tahun yak sayangku semoga panjang umur semoga sehat selalu semoga segala urusannya
+                        di permudah aamiin.</p>
+                    <p>Aku harap di umur kamu yang sekarang kamu bisa lebih menjaga kesehatan kamu yak sayang, jangan
+                        sering sering nagis tengah malem juga sayang yak, aku harap juga kamu selalu di kelilingi orang
+                        orang baik juga yak, dan kalo ada kesulitan butuh bantuan selalu bilang ak sayang kan sekarang
+                        ada aku aku bakal tetap ada di belakang kamu disetiap kamu butuh aku usahain buat selalu ada
+                        buat kamu.</p>
+                    <p>Makasih yak uda hadir di hidup aku, makasih buat semuanya juga yak sayang dan semoga semua
+                        perlakuan baik kamu dibalas juga dengan kebaikan lagi yak. kamu harus jadi diri kamu sendiri
+                        jangan denger kata orang, kamu yak kamu orang lain yang orang lain, dan jangan pernah sesekali
+                        ngikutin kata orang lain, hidup kamu atur sendiri sama kamu yak sayang.</p>
+                    <p>Terakhir, jangan lupa untuk bersyukur buat hari ini besok dan seterusnya yak sayang. Happy
+                        birthday, my favorite person ever.</p>
+                </div>
+                <p class="mt-8 text-right text-pink-200 font-serif italic text-lg">— from me with so much love, always.
+                </p>
+            </div>
+        </section>
+
+        <!-- Wishes Section -->
+        <section id="wishes" class="py-24 px-4">
+            <div class="max-w-5xl mx-auto">
+                <div class="text-center mb-14">
+                    <p class="text-pink-400 tracking-[0.2em] text-xs uppercase mb-2">Sent with the current, for you</p>
+                    <h2 class="text-4xl md:text-5xl font-serif text-white">Harapan untuk <span
+                            class="italic text-amber-200">Tahun Ini</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="glass-card p-7">
+                        <div class="text-pink-400 mb-2 text-2xl font-serif leading-none">“</div>
+                        <p class="text-gray-200 text-sm md:text-base leading-relaxed">Semoga tahun ini bisa ngasih kamu
+                            kesabaran seluas samudra.</p>
+                    </div>
+                    <div class="glass-card p-7">
+                        <div class="text-pink-400 mb-2 text-2xl font-serif leading-none">“</div>
+                        <p class="text-gray-200 text-sm md:text-base leading-relaxed">Semoga hari-hari kamu di penuhi
+                            segala kebaikan dan juga selalu di permudakan jalannya.</p>
+                    </div>
+                    <div class="glass-card p-7">
+                        <div class="text-pink-400 mb-2 text-2xl font-serif leading-none">“</div>
+                        <p class="text-gray-200 text-sm md:text-base leading-relaxed">Semoga semua impian kamu satu per
+                            satu bisa menjadi kenyataan.</p>
+                    </div>
+                    <div class="glass-card p-7">
+                        <div class="text-pink-400 mb-2 text-2xl font-serif leading-none">“</div>
+                        <p class="text-pink-200 font-serif italic text-base md:text-lg leading-relaxed">Stay grounded,
+                            stay grateful, and tetap jadi kamu yang sekarang — a beautiful soul with your own way,
+                            always.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ending / Make a Wish Section -->
+        <section id="ending" class="py-28 px-4 flex flex-col items-center justify-center text-center">
+            <p class="text-pink-400 tracking-[0.2em] text-xs uppercase mb-3">Resurfacing, almost there</p>
+            <h1 class="text-5xl md:text-7xl font-serif text-glow mb-6 leading-tight">
+                Happy Birthday,<br>
+                <span class="italic text-amber-200">Sayangkuu.</span>
+            </h1>
+            <p class="text-gray-300 text-sm md:text-base max-w-lg mb-12 leading-relaxed">
+                Makasih udah ngasih aku kesempatan buat bikin hari kamu terasa sedikit lebih spesial. Tutup mata kamu,
+                buat permintaan, dan tiup lilinya yak.
+            </p>
+
+            <!-- 5 CSS Candles (Sama seperti di video) -->
+            <div class="candle-container" id="candles">
+                <div class="candle" style="height: 54px;">
+                    <div class="flame"></div>
+                </div>
+                <div class="candle" style="height: 68px;">
+                    <div class="flame"></div>
+                </div>
+                <div class="candle" style="height: 76px;">
+                    <div class="flame"></div>
+                </div>
+                <div class="candle" style="height: 64px;">
+                    <div class="flame"></div>
+                </div>
+                <div class="candle" style="height: 52px;">
+                    <div class="flame"></div>
+                </div>
+            </div>
+
+            <button onclick="makeWish()" id="wish-btn"
+                class="mt-4 px-8 py-3 rounded-full bg-amber-500/15 border border-amber-300/40 hover:bg-amber-500/25 text-amber-200 text-sm font-medium transition shadow-[0_0_20px_rgba(251,191,36,0.2)]">
+                Make a wish & blow out 🌬️
+            </button>
+
+            <div id="wish-granted"
+                class="hidden mt-6 opacity-0 transition-opacity duration-1000 flex flex-col items-center">
+                <p class="text-2xl font-serif text-pink-200 italic text-glow mb-6">Wish granted. ✨</p>
+                <a href="#home"
+                    class="px-7 py-2.5 rounded-full bg-white/5 border border-pink-300/25 hover:bg-white/10 text-pink-100 text-xs tracking-wider uppercase transition">
+                    Float Back to the Surface ↑
+                </a>
+            </div>
+        </section>
+
+        <footer class="py-8 text-center text-gray-500 text-[11px] tracking-[0.2em] border-t border-white/5">
+            MADE WITH LOVE BY SOMEONE WHO LOVES YOU • 2026
+        </footer>
+    </div>
+
+    <!-- File Audio Lagu (Ganti 'lagu.mp3' dengan file lagumu) -->
+    <audio id="bg-music" loop>
+        <source src="audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 1. VERTICAL FLOATING MUSIC SIDEBAR (KIRI BAWAH) -->
+    <div id="music-card" class="music-sidebar-card minimized flex flex-col">
+        <!-- Header Kecil + Tombol Perkecil -->
+        <div class="flex items-center justify-between mb-2 px-0.5">
+            <div class="flex items-center gap-1.5">
+                <div id="eq-container" class="flex items-end gap-[2px] h-3 eq-paused">
+                    <span class="eq-bar"></span>
+                    <span class="eq-bar"></span>
+                    <span class="eq-bar"></span>
+                </div>
+                <span id="music-status" class="text-[9px] uppercase tracking-wider text-pink-300/80">Paused</span>
+            </div>
+            <button onclick="minimizeMusic()"
+                class="w-5 h-5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white text-[11px] flex items-center justify-center transition"
+                title="Perkecil">
+                ✕
+            </button>
+        </div>
+
+        <!-- Foto Cover Vertikal/Kotak di Atas -->
+        <div class="relative w-full aspect-square rounded-xl overflow-hidden mb-2.5 border border-pink-300/20">
+            <img src="memory1.jpeg" alt="Song Cover" class="w-full h-full object-cover grayscale">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        </div>
+
+        <!-- Judul Lagu & Penyanyi -->
+        <div class="text-left px-0.5 mb-2.5">
+            <p class="text-xs font-medium text-white truncate">Hanya Untukmu</p>
+            <p class="text-[10px] text-pink-300/70 truncate">Sal Priadi</p>
+        </div>
+
+        <!-- Tombol Kontrol Play/Pause -->
+        <button onclick="toggleMusic()" id="play-pause-btn"
+            class="w-full py-1.5 rounded-lg bg-pink-500/20 hover:bg-pink-500/35 border border-pink-400/25 text-pink-100 text-[11px] font-medium flex items-center justify-center gap-1.5 transition">
+            <span>▶</span> <span id="play-btn-text">Play Music</span>
+        </button>
+    </div>
+
+    <!-- Tombol Mini Saat Kartu Musik Diperkecil (Harus di luar #music-card) -->
+    <button id="music-mini-btn" onclick="expandMusic()"
+        class="music-mini-pill mini-hidden flex px-4 py-2.5 rounded-full bg-[#260a18]/90 backdrop-blur-md border border-pink-400/40 text-pink-200 text-xs items-center gap-2 shadow-[0_8px_25px_rgba(244,114,182,0.3)] cursor-pointer">
+        <span class="text-pink-400 animate-pulse">♪</span>
+        <span>Music</span>
+    </button>
+
+    <!-- 2. RIGHT VERTICAL SCROLL INDICATOR (KANAN SEPERTI DI VIDEO) -->
+    <div class="right-scroll-track hidden sm:flex">
+        <div id="scroll-fill" class="right-scroll-fill"></div>
+        <a href="#home" class="scroll-dot active" data-target="home" title="Surface"></a>
+        <a href="#memories" class="scroll-dot" data-target="memories" title="Our Memories"></a>
+        <a href="#gallery" class="scroll-dot" data-target="gallery" title="Gallery"></a>
+        <a href="#letter" class="scroll-dot" data-target="letter" title="The Letter"></a>
+        <a href="#wishes" class="scroll-dot" data-target="wishes" title="Wishes"></a>
+    </div>
+
+    <!-- Modal Perbesar Foto Galeri -->
+    <div id="photo-modal" onclick="closePhoto()"
+        class="hidden fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+        <div onclick="event.stopPropagation()" class="glass-card p-3 max-w-sm w-full text-center relative">
+            <img id="modal-img" src="" alt="Preview" class="w-full rounded-xl mb-3 max-h-[70vh] object-cover">
+            <p id="modal-caption" class="text-pink-100 text-xs md:text-sm px-2 mb-2"></p>
+            <button onclick="closePhoto()" class="text-[11px] text-pink-400 uppercase tracking-widest mt-1">Close
+                ✕</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // --- 1. SECRET CODE LOGIC ---
+        const inputs = document.querySelectorAll('.pin-input');
+        const entryScreen = document.getElementById('entry-screen');
+        const mainContent = document.getElementById('main-content');
+        const pinMessage = document.getElementById('pin-message');
+
+        const SECRET_PIN = "251108";
+
+        inputs.forEach((input, index) => {
+            input.addEventListener('focus', () => input.select());
+
+            input.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+
+                if (e.target.value !== '' && index < inputs.length - 1) {
+                    inputs[index + 1].focus();
+                }
+
+                const code = Array.from(inputs).map(i => i.value).join('');
+                if (code.length === 6) {
+                    if (code === SECRET_PIN) {
+                        pinMessage.textContent = "Unlocking...";
+                        pinMessage.classList.remove('text-red-400', 'text-gray-400');
+                        pinMessage.classList.add('text-pink-300');
+                        unlockSite();
+                    } else {
+                        pinMessage.textContent = "Incorrect code. Try again.";
+                        pinMessage.classList.remove('text-gray-400');
+                        pinMessage.classList.add('text-red-400');
+
+                        setTimeout(() => {
+                            inputs.forEach(i => i.value = '');
+                            inputs[0].focus();
+                        }, 500);
+                    }
+                }
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && e.target.value === '' && index > 0) {
+                    inputs[index - 1].focus();
+                    inputs[index - 1].value = '';
+                    pinMessage.textContent = "Enter our 6-digit secret code to unlock.";
+                    pinMessage.classList.remove('text-red-400');
+                    pinMessage.classList.add('text-gray-400');
+                }
+            });
+        });
+
+        function unlockSite() {
+            inputs.forEach(i => i.blur());
+            entryScreen.style.opacity = '0';
+            entryScreen.style.pointerEvents = 'none';
+
+            playMusic();
+
+            setTimeout(() => {
+                entryScreen.classList.add('hidden');
+                mainContent.style.opacity = '1';
+                document.body.style.overflowY = 'auto';
+
+                // Munculkan sidebar musik dengan efek pop-up setelah layar terbuka
+                setTimeout(() => {
+                    musicCard.classList.remove('minimized');
+                }, 350);
+            }, 800);
+        }
+
+        document.body.style.overflowY = 'hidden';
+
+        // --- 2. LETTER TYPEWRITER LOGIC ---
+        let letterOpened = false;
+
+        function openLetter() {
+            if (letterOpened) return;
+            letterOpened = true;
+
+            const letter = document.getElementById('letter-content');
+            const btn = document.getElementById('bottle-btn');
+            const textElements = letter.querySelectorAll('h3, p');
+
+            const originalTexts = Array.from(textElements).map(el => el.textContent);
+            textElements.forEach(el => el.textContent = '');
+
+            // Sembunyikan botol seperti di video
+            btn.style.display = 'none';
+            letter.classList.add('open');
+
+            setTimeout(() => {
+                letter.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 300);
+
+            const typingSpeed = 28;
+            let elementIndex = 0;
+            let charIndex = 0;
+
+            function typeNext() {
+                if (elementIndex >= textElements.length) return;
+
+                const currentEl = textElements[elementIndex];
+                const currentText = originalTexts[elementIndex];
+                currentEl.classList.add('typing-cursor');
+
+                if (charIndex < currentText.length) {
+                    currentEl.textContent += currentText.charAt(charIndex);
+                    charIndex++;
+                    setTimeout(typeNext, typingSpeed);
+                } else {
+                    currentEl.classList.remove('typing-cursor');
+                    elementIndex++;
+                    charIndex = 0;
+                    setTimeout(typeNext, 350);
+                }
+            }
+
+            setTimeout(typeNext, 500);
+        }
+
+        // --- 3. CANDLES LOGIC ---
+        function makeWish() {
+            const candles = document.querySelectorAll('.candle');
+            const wishGranted = document.getElementById('wish-granted');
+            const btn = document.getElementById('wish-btn');
+
+            candles.forEach(candle => candle.classList.add('blown-out'));
+
+            btn.style.display = 'none';
+            wishGranted.classList.remove('hidden');
+
+            setTimeout(() => {
+                wishGranted.style.opacity = '1';
+            }, 150);
+        }
+
+        // --- 4. VERTICAL MUSIC SIDEBAR LOGIC ---
+        const bgMusic = document.getElementById('bg-music');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const eqContainer = document.getElementById('eq-container');
+        const musicStatus = document.getElementById('music-status');
+        const musicCard = document.getElementById('music-card');
+        const musicMiniBtn = document.getElementById('music-mini-btn');
+
+        function playMusic() {
+            bgMusic.play().then(() => {
+                playPauseBtn.innerHTML = '<span>❚❚</span> <span>Pause</span>';
+                eqContainer.classList.remove('eq-paused');
+                musicStatus.textContent = 'Playing';
+            }).catch(() => {
+                musicStatus.textContent = 'Tap Play';
+            });
+        }
+
+        function toggleMusic() {
+            if (bgMusic.paused) {
+                playMusic();
+            } else {
+                bgMusic.pause();
+                playPauseBtn.innerHTML = '<span>▶</span> <span>Play Music</span>';
+                eqContainer.classList.add('eq-paused');
+                musicStatus.textContent = 'Paused';
+            }
+        }
+
+        function minimizeMusic() {
+            musicCard.classList.add('minimized');
+            setTimeout(() => {
+                musicMiniBtn.classList.remove('hidden', 'mini-hidden');
+            }, 140);
+        }
+
+        function expandMusic() {
+            musicMiniBtn.classList.add('mini-hidden');
+            setTimeout(() => {
+                musicCard.classList.remove('hidden', 'minimized');
+            }, 120);
+        }
+
+        // --- 5. RIGHT SCROLL INDICATOR LOGIC ---
+        const scrollFill = document.getElementById('scroll-fill');
+        const scrollDots = document.querySelectorAll('.scroll-dot');
+        const sections = ['home', 'memories', 'gallery', 'letter', 'wishes'];
+
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+
+            scrollFill.style.height = `${Math.min(scrollPercent, 100)}%`;
+
+            let currentSection = 'home';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && scrollTop >= el.offsetTop - 300) {
+                    currentSection = id;
+                }
+            });
+
+            scrollDots.forEach(dot => {
+                dot.classList.toggle('active', dot.dataset.target === currentSection);
+            });
+        });
+
+        // --- 6. PHOTO MODAL LOGIC ---
+        function openPhoto(src, caption) {
+            document.getElementById('modal-img').src = src;
+            document.getElementById('modal-caption').textContent = caption;
+            document.getElementById('photo-modal').classList.remove('hidden');
+        }
+
+        function closePhoto() {
+            document.getElementById('photo-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+
+</html>
